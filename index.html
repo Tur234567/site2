@@ -130,7 +130,10 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;"),
           date: now,
-          comment: addFormText.value,
+          comment: addFormText.value.replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;"),
           like: '0',
         })
 
