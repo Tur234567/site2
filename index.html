@@ -36,47 +36,34 @@
     const addFormName = document.querySelector('.add-form-name');
     const addFormText = document.querySelector('.add-form-text');
     const button = document.querySelector('.add-form-button');
-      
-    const info = [
-      {
-        name: 'Глеб Фокин',
-        date: '12.02.22 12:18',
-        comment: 'Это будет первый комментарий на этой странице',
-        like: '3',
-      },
-      {
-        name: 'Варвара Н.',
-        date: '13.02.22 19:22',
-        comment: 'Мне нравится как оформлена эта страница! ❤',
-        like: '75',
-      },
-    ];
 
-    const renderComment = () => {
-      const infoHtml = info.map((infoPeople) => {
-        return `<li class="comment">
-          <div class="comment-header">
-            <div class="name_people">${infoPeople.name}</div>
-            <div>${infoPeople.date}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              ${infoPeople.comment}
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">${infoPeople.like}</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>`
-      }).join('');
+    fetch("https://webdev-hw-api.vercel.app/api/v1/Tur/comments",
+    {
+      method: "GET",
+    }).then((response) => {
+      const JsonResponse = response.json();
+      const data = new Date();
+      const now = data.toLocaleString();
+      JsonResponse.then((responseData => {
+        const appComments = responseData.comments.map((comment) => {
+          return {
+            name: comment.author.name,
+            date: new Date(comment.date),
+            text: comment.text,
+            likes: comment.likes,
+          };
+        })
+        info = appComments;
+          renderComment();
+          likesCounter();
+          commentAndNameCopy();
+      }))
+    })
 
-      comments.innerHTML = infoHtml;
-    };
+    
+    let info = [];
 
-    renderComment();
+    
 
     function likesCounter() {
   const likeButtons = document.querySelectorAll('.like-button');
@@ -96,7 +83,31 @@
   });
 }
 
-    likesCounter();
+likesCounter();
+
+    const renderComment = () => {
+      const infoHtml = info.map((comment) => {
+        return `<li class="comment">
+          <div class="comment-header">
+            <div class="name_people">${comment.name}</div>
+            <div>${comment.date}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${comment.text}
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">${comment.likes}</span>
+              <button class="like-button"></button>
+            </div>
+          </div>
+        </li>`
+      }).join("");
+
+      comments.innerHTML = infoHtml;
+    };
 
     function commentAndNameCopy() {
       const namePeoples = document.querySelectorAll('.name_people');
@@ -109,9 +120,10 @@
       })
     });
     }
-
+    renderComment();
+    likesCounter();
     commentAndNameCopy();
-
+    
     button.addEventListener('click', function(event) {
       const data = new Date();
       const now = data.toLocaleString();
@@ -124,22 +136,17 @@
         return false;
       }
       else {
-        info.push({
-          name: addFormName.value.replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;"),
-          date: now,
-          comment: addFormText.value.replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;"),
-          like: '0',
-        })
-
-        renderComment();
-        likesCounter()
-        commentAndNameCopy();
+        fetch("https://webdev-hw-api.vercel.app/api/v1/Tur/comments", {
+        method: "POST",
+        body: JSON.stringify({text: addFormText.value, name: addFormName.value,}),
+      }).then((response1) => {
+        response1.json().then((responseData1) => {
+          info = responseData1.comments
+          renderComment();
+          likesCounter();
+          commentAndNameCopy();
+        });
+      });
       }
     });
   </script>
