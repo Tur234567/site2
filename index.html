@@ -36,8 +36,8 @@
     const addFormName = document.querySelector('.add-form-name');
     const addFormText = document.querySelector('.add-form-text');
     const button = document.querySelector('.add-form-button');
-
-    fetch("https://webdev-hw-api.vercel.app/api/v1/Tur/comments",
+    function getCommentsData() {
+      fetch("https://webdev-hw-api.vercel.app/api/v1/Tur/comments",
     {
       method: "GET",
     }).then((response) => {
@@ -59,11 +59,11 @@
           commentAndNameCopy();
       }))
     })
+    }
 
-    
+    getCommentsData()
+
     let info = [];
-
-    
 
     function likesCounter() {
   const likeButtons = document.querySelectorAll('.like-button');
@@ -141,6 +141,7 @@ likesCounter();
         body: JSON.stringify({text: addFormText.value, name: addFormName.value,}),
       }).then((response1) => {
         response1.json().then((responseData1) => {
+          getCommentsData()
           info = responseData1.comments
           renderComment();
           likesCounter();
