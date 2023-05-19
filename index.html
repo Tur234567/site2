@@ -63,7 +63,6 @@
             date: new Date(comment.date),
             text: comment.text,
             likes: comment.likes,
-            forceError: true,
           };
         })
         info = appComments;
@@ -73,10 +72,14 @@
       }))
       .then((response) => {
         return console.log(response);
-        if (response.status === 201) {
+        if (response.status === 200) {
           return response.json();
+        } 
+        if (response.status === 500) {
+          alert('Произошла ошибка сервера, попробуйте позже');
+          throw new Error('Произошла ошибка сервера, попробуйте позже');
         } else {
-          throw new Error('Сервер упал');
+          throw new Error('Упс, что то пошло не так');
         }
       })
       .then(() => {
@@ -157,15 +160,6 @@ likesCounter();
     button.addEventListener('click', function(event) {
       const data = new Date();
       const now = data.toLocaleString();
-        if (addFormName.value < 2) {
-        alert('Пропишите свое имя. (Минимум 1 символ)')
-        return false;
-      } 
-      if (addFormText.value < 2) {
-        alert('Пропишите комментарий. (Минимум 1 символ)')
-        return false;
-      }
-      else {
         download.style.display = 'block';
         removeDiv.classList.add('delete-div');
         return fetch("https://webdev-hw-api.vercel.app/api/v1/MnogoYje/comments", {
@@ -173,11 +167,20 @@ likesCounter();
         body: JSON.stringify({text: addFormText.value, name: addFormName.value,}),
       })
       .then((response) => {
-        console.log(response);
         if (response.status === 201) {
           return response.json();
-        } else {
-          throw new Error('Сервер упал');
+        } 
+        if (response.status === 400) {
+          alert('Недостаточно символов, введите корректное имя и комментарий, от трех символов')
+          throw new Error('Недостаточно символов');
+        }
+        if (response.status === 500) {
+          alert('Произошла ошибка сервера, попробуйте позже');
+          throw new Error('Произошла ошибка сервера, попробуйте позже');
+        } 
+        else {
+          alert('Упс, что то пошло не так');
+          throw new Error('Упс, что то пошло не так');
         }
       })
       .then(() => {
@@ -191,10 +194,8 @@ likesCounter();
       }).catch((error) => {
         download.style.display = 'none';
         removeDiv.classList.remove('delete-div');
-        alert('Кажется что то пошло не так, попробуйте позже')
         console.warn(error);
       })
-      }
     });
   </script>
 </html>
