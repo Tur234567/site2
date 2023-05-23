@@ -7,10 +7,9 @@ const addFormText = document.querySelector('.add-form-text');
 const button = document.querySelector('.add-form-button');
 const downloadGet = document.querySelector('.download-GET');
 
-import getListStudentsEdit from "commentData.js";
+import { getListStudentsEdit } from './commentData.js'
 
-let info = [];
-
+getListStudentsEdit()
 function likesCounter() {
 const likeButtons = document.querySelectorAll('.like-button');
 const likes = document.querySelectorAll('.likes-counter');
@@ -30,8 +29,7 @@ likeButton.onclick = function (event) {
 }
 
 likesCounter();
-
-import renderComment from "render.js";
+import { renderComment } from './render.js'
 
 function commentAndNameCopy() {
   const namePeoples = document.querySelectorAll('.name_people');
