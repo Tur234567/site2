@@ -1,4 +1,3 @@
-
 const getListStudentsEdit = () => { 
   
   return fetch("https://webdev-hw-api.vercel.app/api/v1/MnogoYje/comments",
@@ -43,4 +42,6 @@ const getListStudentsEdit = () => {
 })
 }
 
-export { getListStudentsEdit };
+getCommentsData()
+
+export default getListStudentsEdit

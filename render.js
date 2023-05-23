@@ -1,3 +1,4 @@
+import { getListStudentsEdit } from './commentData.js'
 const renderComment = () => {
     const infoHtml = info.map((comment) => {
       return `<li class="comment">
@@ -20,5 +21,7 @@ const renderComment = () => {
     }).join("");
   
     comments.innerHTML = infoHtml;
-  };
-  export default renderComment;
+  }
+
+  export { renderComment };
+  
