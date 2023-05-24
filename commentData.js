@@ -1,7 +1,7 @@
 let info = [];
 const addFormName = document.querySelector('.add-form-name');
 const addFormText = document.querySelector('.add-form-text');
-const downloadGet = document.querySelector('download-GET');
+const downloadGet = document.querySelector('.download-GET');
 function getCommentsData() {
   return fetch("https://webdev-hw-api.vercel.app/api/v1/MnogoYje/comments",
 {
