@@ -8,15 +8,21 @@ function getCommentsData() {
   method: "GET",
 }).then((response) => {
   const JsonResponse = response.json();
-  const data = new Date();
-  const now = data.toLocaleString();
+  const date = new Date();
+  const day = ('0' + date.getDate()).slice(-2);
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const year = date.getFullYear().toString().slice(-2);
+  const hours = ('0' + date.getHours()).slice(-2);
+  const minutes = ('0' + date.getMinutes()).slice(-2);
+  const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
   JsonResponse.then((responseData => {
     const appComments = responseData.comments.map((comment) => {
       return {
         name: comment.author.name,
-        date: new Date(comment.date),
+        date: formattedDate,
         text: comment.text,
         likes: comment.likes,
+        Iliked: false,
       };
     })
     info = appComments;
@@ -76,8 +82,6 @@ const renderComment = () => {
     const deleteDiv = document.querySelector('.delete-div');
     const removeDiv = document.querySelector('.remove-div');
     button.addEventListener('click', function(event) {
-      const data = new Date();
-      const now = data.toLocaleString();
         download.style.display = 'block';
         removeDiv.classList.add('delete-div');
         return fetch("https://webdev-hw-api.vercel.app/api/v1/MnogoYje/comments", {

@@ -7,29 +7,29 @@ const addFormText = document.querySelector('.add-form-text');
 const button = document.querySelector('.add-form-button');
 const downloadGet = document.querySelector('.download-GET');
 
+
+likesCounter();
 getCommentsData()
 
 let info = [];
 
 function likesCounter() {
-const likeButtons = document.querySelectorAll('.like-button');
-const likes = document.querySelectorAll('.likes-counter');
-
-likeButtons.forEach((likeButton, likeButtonId) => {
-likeButton.onclick = function (event) {
-  event.stopPropagation();
-  if (likeButton.classList.contains('active-like')) {
-    likeButton.classList.remove('active-like');
-    likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
-  } else {
-    likeButton.classList.add('active-like')
-    likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML + 1;
+  const likeButtons = document.querySelectorAll('.like-button');
+  const likes = document.querySelectorAll('.likes-counter');
+  likeButtons.forEach((likeButton, likeButtonId) => {
+  likeButton.onclick = function (event) {
+    event.stopPropagation();
+    if (likeButton.classList.contains('active-like')) {
+      likeButton.classList.remove('active-like');
+      likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
+    } else {
+      likeButton.classList.add('active-like')
+      likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML + 1;
+    }
   }
-}
-});
-}
+  });
+  }
 
-likesCounter();
 function commentAndNameCopy() {
   const namePeoples = document.querySelectorAll('.name_people');
 const commentTexts = document.querySelectorAll('.comment-text');
@@ -41,6 +41,8 @@ commentsBlock.forEach((commentBlock, commentBlockId) => {
   })
 });
 }
+
+
 renderComment();
 likesCounter();
 commentAndNameCopy();
