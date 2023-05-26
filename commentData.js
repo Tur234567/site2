@@ -8,18 +8,18 @@ function getCommentsData() {
   method: "GET",
 }).then((response) => {
   const JsonResponse = response.json();
-  const date = new Date();
+  JsonResponse.then((responseData => {
+    const date = new Date();
   const day = ('0' + date.getDate()).slice(-2);
   const month = ('0' + (date.getMonth() + 1)).slice(-2);
   const year = date.getFullYear().toString().slice(-2);
   const hours = ('0' + date.getHours()).slice(-2);
   const minutes = ('0' + date.getMinutes()).slice(-2);
   const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
-  JsonResponse.then((responseData => {
     const appComments = responseData.comments.map((comment) => {
       return {
         name: comment.author.name,
-        date: formattedDate(comment.date), // Вот так получается функция, которая падает в ошибку.
+        date: comment.date,
         text: comment.text,
         likes: comment.likes,
         Iliked: false,
