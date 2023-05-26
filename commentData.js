@@ -19,7 +19,7 @@ function getCommentsData() {
     const appComments = responseData.comments.map((comment) => {
       return {
         name: comment.author.name,
-        date: formattedDate(comment.date),
+        date: formattedDate(comment.date), // Вот так получается функция, которая падает в ошибку.
         text: comment.text,
         likes: comment.likes,
         Iliked: false,
