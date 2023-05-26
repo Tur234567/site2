@@ -9,17 +9,10 @@ function getCommentsData() {
 }).then((response) => {
   const JsonResponse = response.json();
   JsonResponse.then((responseData => {
-    const date = new Date();
-  const day = ('0' + date.getDate()).slice(-2);
-  const month = ('0' + (date.getMonth() + 1)).slice(-2);
-  const year = date.getFullYear().toString().slice(-2);
-  const hours = ('0' + date.getHours()).slice(-2);
-  const minutes = ('0' + date.getMinutes()).slice(-2);
-  const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
     const appComments = responseData.comments.map((comment) => {
       return {
         name: comment.author.name,
-        date: comment.date,
+        date: comment.date, //Если я правильно понимаю, то так
         text: comment.text,
         likes: comment.likes,
         Iliked: false,
