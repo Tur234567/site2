@@ -8,15 +8,14 @@ function getCommentsData() {
   method: "GET",
 }).then((response) => {
   const JsonResponse = response.json();
-  const data = new Date();
-  const now = data.toLocaleString();
   JsonResponse.then((responseData => {
     const appComments = responseData.comments.map((comment) => {
       return {
         name: comment.author.name,
-        date: new Date(comment.date),
+        date: new Date(comment.date), //Если я правильно понимаю, то так
         text: comment.text,
         likes: comment.likes,
+        Iliked: false,
       };
     })
     info = appComments;
@@ -45,13 +44,50 @@ function getCommentsData() {
 })
 }
 
+function likesCounter() {
+  const likeButtons = document.querySelectorAll('.like-button');
+  const likes = document.querySelectorAll('.likes-counter');
+  likeButtons.forEach((likeButton, likeButtonId) => {
+  likeButton.onclick = function (event) {
+    event.stopPropagation();
+    if (likeButton.classList.contains('active-like')) {
+      likeButton.classList.remove('active-like');
+      likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
+    } else {
+      likeButton.classList.add('active-like')
+      likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML + 1;
+    }
+  }
+  });
+  }
+
+  function commentAndNameCopy() {
+    const namePeoples = document.querySelectorAll('.name_people');
+  const commentTexts = document.querySelectorAll('.comment-text');
+  const commentsBlock = document.querySelectorAll('.comment');
+  commentsBlock.forEach((commentBlock, commentBlockId) => {
+    commentBlock.addEventListener('click', function (event) {
+      event.stopPropagation();
+      addFormText.value = ('>' + commentTexts[commentBlockId].textContent + namePeoples[commentBlockId].textContent + ', ')
+    })
+  });
+  }
+
 const comments = document.querySelector('.comments')
 const renderComment = () => {
     const infoHtml = info.map((comment) => {
-      return `<li class="comment">
+        let dates = '';
+        const day = ('0' + comment.date.getDate()).slice(-2);
+        const month = ('0' + (comment.date.getMonth() + 1)).slice(-2);
+        const year = comment.date.getFullYear().toString().slice(-2);
+        const hours = ('0' + comment.date.getHours()).slice(-2);
+        const minutes = ('0' + comment.date.getMinutes()).slice(-2);
+        dates = `${day}.${month}.${year} ${hours}:${minutes}`;
+      
+        return `<li class="comment">
         <div class="comment-header">
           <div class="name_people">${comment.name}</div>
-          <div>${comment.date}</div>
+          <div>${dates}</div>
         </div>
         <div class="comment-body">
           <div class="comment-text">
@@ -68,6 +104,8 @@ const renderComment = () => {
     }).join("");
   
     comments.innerHTML = infoHtml;
+    likesCounter();
+    commentAndNameCopy();
   }
   const button = document.querySelector('.add-form-button');
   
@@ -76,8 +114,6 @@ const renderComment = () => {
     const deleteDiv = document.querySelector('.delete-div');
     const removeDiv = document.querySelector('.remove-div');
     button.addEventListener('click', function(event) {
-      const data = new Date();
-      const now = data.toLocaleString();
         download.style.display = 'block';
         removeDiv.classList.add('delete-div');
         return fetch("https://webdev-hw-api.vercel.app/api/v1/MnogoYje/comments", {
@@ -117,4 +153,4 @@ const renderComment = () => {
     });
   } 
 
-export { getCommentsData, renderComment, buttonClick };
+export { getCommentsData, renderComment, buttonClick, likesCounter, commentAndNameCopy };
