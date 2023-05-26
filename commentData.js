@@ -19,7 +19,7 @@ function getCommentsData() {
     const appComments = responseData.comments.map((comment) => {
       return {
         name: comment.author.name,
-        date: formattedDate,
+        date: formattedDate(comment.date),
         text: comment.text,
         likes: comment.likes,
         Iliked: false,
@@ -51,6 +51,35 @@ function getCommentsData() {
 })
 }
 
+function likesCounter() {
+  const likeButtons = document.querySelectorAll('.like-button');
+  const likes = document.querySelectorAll('.likes-counter');
+  likeButtons.forEach((likeButton, likeButtonId) => {
+  likeButton.onclick = function (event) {
+    event.stopPropagation();
+    if (likeButton.classList.contains('active-like')) {
+      likeButton.classList.remove('active-like');
+      likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
+    } else {
+      likeButton.classList.add('active-like')
+      likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML + 1;
+    }
+  }
+  });
+  }
+
+  function commentAndNameCopy() {
+    const namePeoples = document.querySelectorAll('.name_people');
+  const commentTexts = document.querySelectorAll('.comment-text');
+  const commentsBlock = document.querySelectorAll('.comment');
+  commentsBlock.forEach((commentBlock, commentBlockId) => {
+    commentBlock.addEventListener('click', function (event) {
+      event.stopPropagation();
+      addFormText.value = ('>' + commentTexts[commentBlockId].textContent + namePeoples[commentBlockId].textContent + ', ')
+    })
+  });
+  }
+
 const comments = document.querySelector('.comments')
 const renderComment = () => {
     const infoHtml = info.map((comment) => {
@@ -74,6 +103,8 @@ const renderComment = () => {
     }).join("");
   
     comments.innerHTML = infoHtml;
+    likesCounter();
+    commentAndNameCopy();
   }
   const button = document.querySelector('.add-form-button');
   
@@ -121,4 +152,4 @@ const renderComment = () => {
     });
   } 
 
-export { getCommentsData, renderComment, buttonClick };
+export { getCommentsData, renderComment, buttonClick, likesCounter, commentAndNameCopy };
