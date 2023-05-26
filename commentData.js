@@ -12,7 +12,7 @@ function getCommentsData() {
     const appComments = responseData.comments.map((comment) => {
       return {
         name: comment.author.name,
-        date: comment.date, //Если я правильно понимаю, то так
+        date: new Date(comment.date), //Если я правильно понимаю, то так
         text: comment.text,
         likes: comment.likes,
         Iliked: false,
@@ -76,10 +76,18 @@ function likesCounter() {
 const comments = document.querySelector('.comments')
 const renderComment = () => {
     const infoHtml = info.map((comment) => {
-      return `<li class="comment">
+        let dates = '';
+        const day = ('0' + comment.date.getDate()).slice(-2);
+        const month = ('0' + (comment.date.getMonth() + 1)).slice(-2);
+        const year = comment.date.getFullYear().toString().slice(-2);
+        const hours = ('0' + comment.date.getHours()).slice(-2);
+        const minutes = ('0' + comment.date.getMinutes()).slice(-2);
+        dates = `${day}.${month}.${year} ${hours}:${minutes}`;
+      
+        return `<li class="comment">
         <div class="comment-header">
           <div class="name_people">${comment.name}</div>
-          <div>${comment.date}</div>
+          <div>${dates}</div>
         </div>
         <div class="comment-body">
           <div class="comment-text">
