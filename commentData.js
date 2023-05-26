@@ -12,7 +12,7 @@ function getCommentsData() {
     const appComments = responseData.comments.map((comment) => {
       return {
         name: comment.author.name,
-        date: new Date(comment.date), //Если я правильно понимаю, то так
+        date: new Date(comment.date),
         text: comment.text,
         likes: comment.likes,
         Iliked: false,
