@@ -6,9 +6,7 @@ function getCommentsData() {
   return fetch("https://webdev-hw-api.vercel.app/api/v1/MnogoYje/comments",
 {
   method: "GET",
-}).then((response) => {
-  const JsonResponse = response.json();
-  JsonResponse.then((responseData => {
+}).then((response) => { response.json().then((responseData => {
     const appComments = responseData.comments.map((comment) => {
       return {
         name: comment.author.name,
@@ -43,6 +41,7 @@ function getCommentsData() {
   })
 })
 }
+
 
 function likesCounter() {
   const likeButtons = document.querySelectorAll('.like-button');

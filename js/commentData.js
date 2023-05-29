@@ -27,16 +27,16 @@ const getListStudentsEdit = () => {
       return response.json();
     } 
     if (response.status === 500) {
-      alert('Произошла ошибка сервера, попробуйте позже');
-      throw new Error('Произошла ошибка сервера, попробуйте позже');
+      alert('ПРОИЗОШЛА ОШИБКА СЕРВЕРА,ПОПРОБУЙТЕ ПОЗЖЕ!');
+      throw new Error('ПРОИЗОШЛА ОШИБКА СЕРВЕРА,ПОПРОБУЙТЕ ПОЗЖЕ!');
     } else {
-      throw new Error('Упс, что то пошло не так');
+      throw new Error('ПОСМОТРИТЕ,ЧТО ТО ПОШЛО НЕ ПО ПЛАНУ!');
     }
   })
   .then(() => {
     return downloadGet.style.display = 'none';
   }).catch((error) => {
-    downloadGet.textContent = 'Кажется что то пошло не так, попробуйте позже';
+    downloadGet.textContent = 'ПРОИЗОШЛА ОШИБКА СЕРВЕРА,ПОПРОБУЙТЕ ПОЗЖЕ!';
     console.warn(error);
   })
 })
