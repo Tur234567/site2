@@ -2,13 +2,16 @@ let info = [];
 const addFormName = document.querySelector('.add-form-name');
 const addFormText = document.querySelector('.add-form-text');
 const downloadGet = document.querySelector('.download-GET');
+const host = "https://wedev-api.sky.pro/api/v2/Artur/comments";
+let token = '';
 function getCommentsData() {
-  return fetch("https://webdev-hw-api.vercel.app/api/v1/MnogoYje/comments",
+  return fetch(host,
 {
   method: "GET",
-}).then((response) => {
-  const JsonResponse = response.json();
-  JsonResponse.then((responseData => {
+  headers: {
+    Authorization: token,
+  },
+}).then((response) => { response.json().then((responseData => {
     const appComments = responseData.comments.map((comment) => {
       return {
         name: comment.author.name,
@@ -25,6 +28,11 @@ function getCommentsData() {
   }))
   .then((response) => {
     return console.log(response);
+    if (response.status === 401) {
+      alert('Введите пароль');
+      renderComment();
+      throw new Error('Введите пароль');
+    }
     if (response.status === 200) {
       return response.json();
     } 
@@ -43,6 +51,7 @@ function getCommentsData() {
   })
 })
 }
+
 
 function likesCounter() {
   const likeButtons = document.querySelectorAll('.like-button');
@@ -72,7 +81,6 @@ function likesCounter() {
     })
   });
   }
-
 const comments = document.querySelector('.comments')
 const renderComment = () => {
     const infoHtml = info.map((comment) => {
@@ -106,6 +114,47 @@ const renderComment = () => {
     comments.innerHTML = infoHtml;
     likesCounter();
     commentAndNameCopy();
+
+    const addForm = document.querySelector('.add_form');
+  if (!token) {
+    const appHtml = `
+        <input
+          type="text"
+          class="add-form-name"
+          placeholder="Введите ваш логин"
+        />
+        <textarea
+          type="textarea"
+          class="add-form-text"
+          placeholder="Введите ваш пароль"
+          rows="4"
+        ></textarea>
+        <div class="add-form-row">
+          <button class="add-form-button">Войти</button>
+        </div>
+    `
+    addForm.innerHTML = appHtml;
+    return;
+  } else {
+    const appHtml = `
+    <input
+    type="text"
+    class="add-form-name"
+    placeholder="Введите ваше имя"
+  />
+  <textarea
+    type="textarea"
+    class="add-form-text"
+    placeholder="Введите ваш коментарий"
+    rows="4"
+  ></textarea>
+  <div class="add-form-row">
+    <button class="add-form-button">Написать</button>
+  </div>
+    `
+    addForm.innerHTML = appHtml;
+    return;
+  }
   }
   const button = document.querySelector('.add-form-button');
   
@@ -114,13 +163,22 @@ const renderComment = () => {
     const deleteDiv = document.querySelector('.delete-div');
     const removeDiv = document.querySelector('.remove-div');
     button.addEventListener('click', function(event) {
+        const token = "Bearer ksdfsksdfjfsdjk";
         download.style.display = 'block';
         removeDiv.classList.add('delete-div');
-        return fetch("https://webdev-hw-api.vercel.app/api/v1/MnogoYje/comments", {
+        return fetch(host, {
         method: "POST",
         body: JSON.stringify({text: addFormText.value, name: addFormName.value,}),
+        headers: {
+          Authorization: token,
+        },
       })
       .then((response) => {
+        if (response.status === 401) {
+          alert('Введите пароль');
+          renderComment();
+          throw new Error('Введите пароль');
+        }
         if (response.status === 201) {
           return response.json();
         } 
