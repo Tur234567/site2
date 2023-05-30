@@ -116,7 +116,7 @@ const renderComment = () => {
     commentAndNameCopy();
 
     const addForm = document.querySelector('.add_form');
-  if (!token) {
+  if (!token) {   // Сделано как на видео, не работает, нужна помощь, иначе не могу двигаться дальше.
     const appHtml = `
         <input
           type="text"
