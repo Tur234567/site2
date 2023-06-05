@@ -1,12 +1,15 @@
 import { getCommentsData, renderComment } from "./main.js";
-import { postTodosAndRender } from "./render.js";
-
+import { arr } from "./render.js";
 
 export function getTodos({ host, downloadGet, info }) {
     return fetch(host,
         {
           method: "GET",
         }).then((response) => {
+          if (response.status === 500) {
+            alert('Произошла ошибка сервера, попробуйте позже');
+            throw new Error('Произошла ошибка сервера, попробуйте позже');
+          } 
           const JsonResponse = response.json();
       JsonResponse.then((responseData => {
         const appComments = responseData.comments.map((comment) => {
@@ -20,18 +23,6 @@ export function getTodos({ host, downloadGet, info }) {
         info = appComments;
           return renderComment({ info });
       }))
-      .then((response) => {
-        return console.log(response);
-        if (response.status === 200) {
-          return response.json();
-        } 
-        if (response.status === 500) {
-          alert('Произошла ошибка сервера, попробуйте позже');
-          throw new Error('Произошла ошибка сервера, попробуйте позже');
-        } else {
-          throw new Error('Упс, что то пошло не так');
-        }
-      })
       .then(() => {
         return downloadGet.style.display = 'none';
       }).catch((error) => {
@@ -42,7 +33,14 @@ export function getTodos({ host, downloadGet, info }) {
 }
 
 export function postTodos({ host, addFormText, addFormName, token, download, removeDiv }) {
-  return postTodosAndRender({ host, addFormText, addFormName, token })
+  JSON.stringify(arr)
+  return fetch(host, {
+    method: "POST",
+    body: JSON.stringify({text: addFormText.value, name: addFormName.value,}),
+    headers: {
+        Authorization: arr[0],
+      }
+  })
   .then((response) => {
     if (response.status === 201) {
       return response.json();
@@ -69,5 +67,26 @@ export function postTodos({ host, addFormText, addFormName, token, download, rem
     download.style.display = 'none';
     removeDiv.classList.remove('delete-div');
     console.warn(error);
+  })
+}
+
+export function loginTodos({ login, password }) {
+  return fetch("https://wedev-api.sky.pro/api/user/login", {
+    method: "POST",
+    body: JSON.stringify({
+      login,
+      password,
+    }),
+  }).then((response) => {
+    if (response.status === 400) {
+      alert('Введите верный логин или пароль')
+      throw new Error('Введите верный логин или пароль')
+    }
+    if (response.status === 500) {
+      alert('Произошла ошибка сервера, попробуйте позже');
+      throw new Error('Произошла ошибка сервера, попробуйте позже');
+    } else {
+      return response.json();
+    }
   })
 }

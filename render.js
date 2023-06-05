@@ -1,10 +1,15 @@
+import { loginTodos } from "./api.js";
+
 let token = ''; 
 let arr = [];
+export { arr }
 export function renderAndLogin({ info, addFormName, formLoginValue }) {
     const comments = document.querySelector('.comments')
     const loginForm = document.querySelector('.form_login');
     const addLoginButton = document.querySelector('.add-login-button');
     const removeForLogin = document.querySelector('.remove-for-login');
+    const formInputPassword = document.querySelector('.form_login_password');
+    const formInputLogin = document.querySelector('.form_login_login');
     if (token.value === ' ') {
         loginForm.style.display = 'none';
     } else {
@@ -13,10 +18,16 @@ export function renderAndLogin({ info, addFormName, formLoginValue }) {
         addLoginButton.addEventListener('click', function forToken() {
             removeForLogin.style.display = 'block';
             loginForm.style.display = 'none';
-            addFormName.value = formLoginValue.value;
-            addFormName.disabled = "disabled";
-            token = "Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k"
-            arr.push(token);
+            
+            loginTodos({ 
+              login: formInputLogin.value, 
+              password: formInputPassword.value,
+            }).then((user) => {
+              token = `Bearer ${user.user.token}`
+              arr.push(token);
+              addFormName.value = user.user.name;
+              addFormName.disabled = "disabled";
+            })
         });
     }
   const infoHtml = info.map((comment) => {
@@ -49,13 +60,3 @@ export function renderAndLogin({ info, addFormName, formLoginValue }) {
   comments.innerHTML = infoHtml;
 }
 
-export function postTodosAndRender({ host, addFormText, addFormName, token }) {
-  JSON.stringify(arr)
-  return fetch(host, {
-    method: "POST",
-    body: JSON.stringify({text: addFormText.value, name: addFormName.value,}),
-    headers: {
-        Authorization: arr[0],
-      }
-  })
-}
