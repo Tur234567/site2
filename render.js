@@ -1,6 +1,6 @@
 import { loginTodos } from "./api.js";
 
-let token = ''; 
+let token = '';
 let arr = [];
 export { arr }
 export function renderAndLogin({ info, addFormName, formLoginValue }) {
@@ -10,26 +10,24 @@ export function renderAndLogin({ info, addFormName, formLoginValue }) {
     const removeForLogin = document.querySelector('.remove-for-login');
     const formInputPassword = document.querySelector('.form_login_password');
     const formInputLogin = document.querySelector('.form_login_login');
-    if (token.value === ' ') {
-        loginForm.style.display = 'none';
-    } else {
+    if (!token) {
         loginForm.style.display = 'block';
         removeForLogin.style.display = 'none';
         addLoginButton.addEventListener('click', function forToken() {
-            removeForLogin.style.display = 'block';
-            loginForm.style.display = 'none';
-            
-            loginTodos({ 
-              login: formInputLogin.value, 
-              password: formInputPassword.value,
-            }).then((user) => {
-              token = `Bearer ${user.user.token}`
-              arr.push(token);
-              addFormName.value = user.user.name;
-              addFormName.disabled = "disabled";
-            })
-        });
-    }
+          removeForLogin.style.display = 'block';
+          loginForm.style.display = 'none';
+          
+          loginTodos({ 
+            login: formInputLogin.value, 
+            password: formInputPassword.value,
+          }).then((user) => {
+            token = `Bearer ${user.user.token}`
+            arr.push(token);
+            addFormName.value = user.user.name;
+            addFormName.disabled = "disabled";
+          })
+      });
+    } 
   const infoHtml = info.map((comment) => {
         let dates = '';
         const day = ('0' + comment.date.getDate()).slice(-2);
