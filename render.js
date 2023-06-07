@@ -1,4 +1,5 @@
 import { loginTodos } from "./api.js";
+import _ from 'lodash';
 
 let token = '';
 let arr = [];
@@ -20,6 +21,7 @@ export function renderAndLogin({ info, addFormName, formLoginValue }) {
           loginTodos({ 
             login: formInputLogin.value, 
             password: formInputPassword.value,
+            name: _.capitalize(name),
           }).then((user) => {
             token = `Bearer ${user.user.token}`
             arr.push(token);
@@ -29,17 +31,13 @@ export function renderAndLogin({ info, addFormName, formLoginValue }) {
       });
     } 
   const infoHtml = info.map((comment) => {
-        let dates = '';
-        const day = ('0' + comment.date.getDate()).slice(-2);
-        const month = ('0' + (comment.date.getMonth() + 1)).slice(-2);
-        const year = comment.date.getFullYear().toString().slice(-2);
-        const hours = ('0' + comment.date.getHours()).slice(-2);
-        const minutes = ('0' + comment.date.getMinutes()).slice(-2);
-        dates = `${day}.${month}.${year} ${hours}:${minutes}`;
+    const now = new Date();
+    format(now, "YYYY-MM-DD hh.mm.ss"); // 03-26-2023 10:33
+    const createDate = format(new Date(comment.created_at), 'YYYY-MM-DD hh.mm.ss');
     return `<li class="comment">
       <div class="comment-header">
         <div class="name_people">${comment.name}</div>
-        <div>${dates}</div>
+        <div>${createDate}</div>
       </div>
       <div class="comment-body">
         <div class="comment-text">

@@ -70,12 +70,13 @@ export function postTodos({ host, addFormText, addFormName, token, download, rem
   })
 }
 
-export function loginTodos({ login, password }) {
+export function loginTodos({ login, password, name}) {
   return fetch("https://wedev-api.sky.pro/api/user/login", {
     method: "POST",
     body: JSON.stringify({
       login,
       password,
+      name,
     }),
   }).then((response) => {
     if (response.status === 400) {
